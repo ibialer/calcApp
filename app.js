@@ -27,8 +27,8 @@ app.use('/users', users);
 
 /////////////////////////////////////////////////////////////////////////////// MYAPP
 var mongoose = require('mongoose');
-//mongoose.connect('mongodb://ibialer:ibialer@ds045531.mongolab.com:45531/CloudFoundry_dvkaut72_eggt439f');
-mongoose.connect('mongodb://localhost/test');
+mongoose.connect('mongodb://ibialer:ibialer@ds045531.mongolab.com:45531/CloudFoundry_dvkaut72_eggt439f');
+//mongoose.connect('mongodb://localhost/test');
 
 var UserSchema = new mongoose.Schema({
     userName: String,
