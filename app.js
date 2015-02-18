@@ -27,14 +27,15 @@ app.use('/users', users);
 
 /////////////////////////////////////////////////////////////////////////////// MYAPP
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://ibialer:ibialer@ds045531.mongolab.com:45531/CloudFoundry_dvkaut72_eggt439f');
+//mongoose.connect('mongodb://ibialer:ibialer@ds045531.mongolab.com:45531/CloudFoundry_dvkaut72_eggt439f');
+mongoose.connect('mongodb://localhost/test');
 
 var UserSchema = new mongoose.Schema({
     userName: String,
     grade: String
 });
 
-mongoose.model('User', UserSchema);
+var User = mongoose.model('User', UserSchema);
 
 var operators = {
     1: "+",
@@ -55,11 +56,9 @@ app.get('/calcs', function (req, res) {
     res.json(calcs);
 });
 
-app.get('/users', function(req, res, next) {
-    User.find(function(err, posts){
-        if(err){ return next(err); }
-
-        res.json(posts);
+app.get('/usersTable', function(req, res) {
+    User.find(function(err, users){
+        res.json(users);
     });
 });
 

@@ -7,16 +7,16 @@
     <link rel='stylesheet' href='//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css' />
     <script>
         var app = angular.module('calculatorApp', []).controller('MainCtrl', ['$scope', '$http', function ($scope, $http) {
-            $http.get('calcs').success(function (data) {
+            $http.get('/calcs').success(function (data) {
                $scope.calcs = data;
             });
 
-            $http.get('users').success(function (data) {
+            $http.get('/usersTable').success(function (data) {
                 $scope.users = data;
             });
 
             $scope.checkResults = function () {
-                $http.post('calcs/'+$scope.userName, $scope.calcs).success(function (data) {
+                $http.post('/calcs/' + $scope.userName, $scope.calcs).success(function (data) {
 
                     $http.get('users').success(function (data) {
                         $scope.users = data;
@@ -35,7 +35,7 @@
         {{calc.first}} {{calc.operator}} {{calc.second}} = <input type="number" ng-model="calc.result">
     </div>
     <input type="button" value="check results" ng-click="checkResults()">
-    <div ng-repeat="user in users">
+    <div ng-repeat="user in users track by $index">
         {{user.userName}} {{user.grade}}
     </div>
   </body>
