@@ -18,7 +18,7 @@
             $scope.checkResults = function () {
                 $http.post('/calcs/' + $scope.userName, $scope.calcs).success(function (data) {
 
-                    $http.get('users').success(function (data) {
+                    $http.get('usersTable').success(function (data) {
                         $scope.users = data;
                     });
 
