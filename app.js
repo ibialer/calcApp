@@ -30,6 +30,19 @@ var mongoose = require('mongoose');
 mongoose.connect('mongodb://ibialer:ibialer@ds045531.mongolab.com:45531/CloudFoundry_dvkaut72_eggt439f');
 //mongoose.connect('mongodb://localhost/test');
 
+// parsing rediscloud credentials
+var vcap_services = process.env.VCAP_SERVICES;
+var rediscloud_service = JSON.parse(vcap_services)["rediscloud"][0];
+var credentials = rediscloud_service.credentials;
+
+var redis = require('redis');
+var client = redis.createClient(credentials.port, credentials.hostname, {no_ready_check: true});
+client.auth(credentials.password);
+
+client.on('connect', function() {
+    console.log('connected to redis');
+});
+
 var UserSchema = new mongoose.Schema({
     userName: String,
     grade: String
@@ -43,6 +56,12 @@ var operators = {
     3: "*",
     4: "/"
 };
+
+app.get('/leadingUser', function (req, res) {
+    client.get('Leading', function(err, reply) {
+        res.json(reply);
+    });
+});
 
 app.get('/calcs', function (req, res) {
     var calcs = [];
@@ -91,22 +110,18 @@ app.post('/calcs/:userName', function (req, res) {
     user.userName = req.params.userName;
     user.grade = j;
 
+    User.findOne().sort('-grade').exec(function(err, doc){
+        if (doc.grade < j) {
+            client.set('Leading', user.userName);
+        }
+    });
+
     user.save(function(err, user){
         if(err){ return next(err); }
 
         res.json(user);
     });
 });
-
-// parsing rediscloud credentials
-var vcap_services = process.env.VCAP_SERVICES;
-var rediscloud_service = JSON.parse(vcap_services)["rediscloud"][0];
-var credentials = rediscloud_service.credentials;
-
-var redis = require('redis');
-var client = redis.createClient(credentials.port, credentials.hostname, {no_ready_check: true});
-client.auth(credentials.password);
-
 //////////////////////////////////////////////////////////////////////////////// MYAPP
 
 // catch 404 and forward to error handler
