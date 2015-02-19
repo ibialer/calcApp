@@ -97,6 +97,16 @@ app.post('/calcs/:userName', function (req, res) {
         res.json(user);
     });
 });
+
+// parsing rediscloud credentials
+var vcap_services = process.env.VCAP_SERVICES;
+var rediscloud_service = JSON.parse(vcap_services)["rediscloud"][0];
+var credentials = rediscloud_service.credentials;
+
+var redis = require('redis');
+var client = redis.createClient(credentials.port, credentials.hostname, {no_ready_check: true});
+client.auth(credentials.password);
+
 //////////////////////////////////////////////////////////////////////////////// MYAPP
 
 // catch 404 and forward to error handler
