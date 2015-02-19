@@ -11,6 +11,10 @@
                $scope.calcs = data;
             });
 
+            $http.get('/leaderUser').success(function (data) {
+                $scope.leader = data;
+            });
+
             $http.get('/usersTable').success(function (data) {
                 $scope.users = data;
             });
@@ -28,6 +32,9 @@
     </script>
   </head>
   <body ng-app="calculatorApp" ng-controller="MainCtrl">
+    <div>
+        Leader: {{leader}}
+    </div>
     <div>
         user: <input type="text" ng-model="userName">
     </div>
