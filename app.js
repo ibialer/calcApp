@@ -106,10 +106,12 @@ app.post('/calcs/:userName', function (req, res) {
         //    }
         //}
 
-        var result = math.round(math.eval(req.body[i].first + req.body[i].operator + req.body[i].second));
+        var result = math.round(math.eval(req.body[i].first + req.body[i].operator + req.body[i].second), 2);
         if (math.round(req.body[i].result, 2) === result) {
             j++;
         }
+
+        console.log()
     }
 
     var user = new User();
