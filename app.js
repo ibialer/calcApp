@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var math = require('mathjs');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -84,25 +85,30 @@ app.get('/usersTable', function(req, res) {
 app.post('/calcs/:userName', function (req, res) {
     var j = 0;
     for (var i=0;i<req.body.length;i++) {
-        if (req.body[i].operator === "+") {
-            if (req.body[i].first + req.body[i].second == req.body[i].result) {
-                j++;
-            }
-        }
-        if (req.body[i].operator === "*") {
-            if (req.body[i].first * req.body[i].second == req.body[i].result) {
-                j++;
-            }
-        }
-        if (req.body[i].operator === "-") {
-            if (req.body[i].first - req.body[i].second == req.body[i].result) {
-                j++;
-            }
-        }
-        if (req.body[i].operator === "/") {
-            if (req.body[i].first / req.body[i].second == req.body[i].result) {
-                j++;
-            }
+        //if (req.body[i].operator === "+") {
+        //    if (req.body[i].first + req.body[i].second == req.body[i].result) {
+        //        j++;
+        //    }
+        //}
+        //if (req.body[i].operator === "*") {
+        //    if (req.body[i].first * req.body[i].second == req.body[i].result) {
+        //        j++;
+        //    }
+        //}
+        //if (req.body[i].operator === "-") {
+        //    if (req.body[i].first - req.body[i].second == req.body[i].result) {
+        //        j++;
+        //    }
+        //}
+        //if (req.body[i].operator === "/") {
+        //    if (req.body[i].first / req.body[i].second == req.body[i].result) {
+        //        j++;
+        //    }
+        //}
+
+        var result = math.round(math.eval(req.body[i].first + req.body[i].operator + req.body[i].second));
+        if (math.round(req.body[i].result, 2) === result) {
+            j++;
         }
     }
 
